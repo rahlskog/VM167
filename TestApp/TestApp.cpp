@@ -25,6 +25,7 @@ TestApp::TestApp(QWidget* parent, Qt::WindowFlags flags): QMainWindow(parent, fl
 {
 	ui = new Ui::TestApp();
 	ui->setupUi(this);
+	this->setFixedSize(this->geometry().width(),this->geometry().height());
 	
 	connect(ui->d_ch1, SIGNAL(clicked(bool)), this, SLOT(changeDigital1(bool)));
 	connect(ui->d_ch2, SIGNAL(clicked(bool)), this, SLOT(changeDigital2(bool)));
@@ -46,15 +47,19 @@ TestApp::TestApp(QWidget* parent, Qt::WindowFlags flags): QMainWindow(parent, fl
 	connect(ui->pwm_ch2, SIGNAL(valueChanged(int)), this, SLOT(setPwm2(int)));
 	connect(ui->pwm_freq, SIGNAL(currentIndexChanged(int)), this, SLOT(pwmFreqChange(int)));
 	
-
-	
 	device = -1;
-
 	int devices = OpenDevices();
-	if (devices & 1)
-		ui->actionCard_1->setEnabled(true);
-	if (devices & 2)
-		ui->actionCard_2->setEnabled(true);
+	
+	if (devices == -1)
+	{
+		ui->actionCard_1->setEnabled(false);
+		ui->actionCard_2->setEnabled(false);
+	}
+	else
+	{
+		ui->actionCard_1->setEnabled(devices & 1);
+		ui->actionCard_2->setEnabled(devices & 2);
+	}
 	
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateInputs()));
