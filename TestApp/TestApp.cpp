@@ -45,7 +45,7 @@ TestApp::TestApp(QWidget* parent, Qt::WindowFlags flags): QMainWindow(parent, fl
 	
 	connect(ui->pwm_ch1, SIGNAL(valueChanged(int)), this, SLOT(setPwm1(int)));
 	connect(ui->pwm_ch2, SIGNAL(valueChanged(int)), this, SLOT(setPwm2(int)));
-	connect(ui->pwm_freq, SIGNAL(currentIndexChanged(int)), this, SLOT(pwmFreqChange(int)));
+	connect(ui->pwm_freq, SIGNAL(currentIndexChanged(int)), this, SLOT(pwmFreqChange()));
 	
 	device = -1;
 	int devices = OpenDevices();
@@ -165,7 +165,7 @@ void TestApp::setPwm2(int value)
 	SetPWM(device, 2, value, ui->pwm_freq->currentIndex()+1);
 }
 
-void TestApp::pwmFreqChange(int value)
+void TestApp::pwmFreqChange()
 {
 	if (device == -1)
 		return;

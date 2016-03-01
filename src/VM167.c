@@ -29,6 +29,7 @@
  */
 #include <libusb.h>
 #include <stdbool.h>
+#include "VM167.h"
 
 
 libusb_context* _ctx;
@@ -58,13 +59,17 @@ int OpenDevices()
 	if (device[0] != NULL)
 	{
 		if (libusb_claim_interface(device[0], 0) == 0)
+		{
 			found |= 1;
+		}
 	}
 	
 	if (device[1] != NULL)
 	{
 		if (libusb_claim_interface(device[1], 0) == 0)
+		{
 			found |= 2;
+		}
 	}
 	
 	return found == 0 ? -1 : found;
@@ -81,7 +86,7 @@ void CloseDevices()
 	
 	if (device[1] != NULL)
 	{
-		libusb_release_interface(device[0], 0);
+		libusb_release_interface(device[1], 0);
 		libusb_close(device[1]);
 	}
 	
@@ -190,8 +195,8 @@ void SetDigitalChannel(int CardAddress, int Channel)
 	unsigned char *buffer = device_buffer[CardAddress];
 	int k;
 	
-	if (Channel>8) Channel = 8;
-	if (Channel<1) Channel = 1;
+	if (Channel>8) { Channel = 8; }
+	if (Channel<1) { Channel = 1; }
 	
 	// Generate a bitstring that is all zeros except the target channel
 	k = 1 << (Channel-1);
@@ -206,15 +211,6 @@ void SetAllDigital(int CardAddress)
 	OutputAllDigital(CardAddress, 0xFF);
 }
 
-bool ReadDigitalChannel(int CardAddress, int Channel)
-{
-	unsigned char byte = ReadAllDigital(CardAddress);
-	if (Channel > 8) Channel = 8;
-	if (Channel < 1) Channel = 1;
-	
-	return (byte & (1 << (Channel-1)) > 0);
-}
-
 int ReadAllDigital(int CardAddress)
 {
 	unsigned char *buffer = device_buffer[CardAddress];
@@ -224,6 +220,15 @@ int ReadAllDigital(int CardAddress)
 	Read(CardAddress);
 	
 	return buffer[1];
+}
+
+bool ReadDigitalChannel(int CardAddress, int Channel)
+{
+	unsigned char byte = ReadAllDigital(CardAddress);
+	if (Channel > 8) { Channel = 8; }
+	if (Channel < 1) { Channel = 1; }
+	
+	return (byte & (1 << (Channel-1) > 0));
 }
 
 void InOutMode(int CardAddress, int HighNibble, int LowNibble)
@@ -325,9 +330,8 @@ int Write(int CardAddress, int bytes)
 	int result;
 	result = libusb_bulk_transfer(device[CardAddress], 0x01, device_buffer[CardAddress], bytes, &transf, 1000);
 	
-	if (result != 0);
-		; // How embarrasing, what do we do now?
-
+	if (result != 0)
+	{} // How embarrasing, what do we do now?
 	
 	return transf;
 }
@@ -338,9 +342,8 @@ int Read(int CardAddress)
 	int result;
 	result = libusb_bulk_transfer(device[CardAddress], 0x81, device_buffer[CardAddress], 64, &transf, 1000);
 	
-	if (result != 0);
-		; // How embarrasing, what do we do now?
-
+	if (result != 0)
+	{} // How embarrasing, what do we do now?
 	
 	return transf;
 }

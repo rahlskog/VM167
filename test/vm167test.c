@@ -12,7 +12,7 @@
  *             GND---+-+
  */
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include "VM167.h"

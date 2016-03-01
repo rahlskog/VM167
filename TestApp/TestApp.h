@@ -27,9 +27,9 @@ class TestApp : public QMainWindow
 {
 	Q_OBJECT
 public:
-    explicit TestApp(QWidget* parent = 0, Qt::WindowFlags flags = 0);
-    virtual ~TestApp();
-	
+	explicit TestApp(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+	virtual ~TestApp();
+
 public slots:
 	void updateInputs();
 	void selectCardOne();
@@ -37,11 +37,11 @@ public slots:
 	
 	void selectCard(int card);
 	void switchIOMode();
-    void setPwm1(int value);
+	void setPwm1(int value);
 	void setPwm2(int value);
-    void pwmFreqChange(int value);
-    void changeDigital1(bool value);
-    void changeDigital2(bool value);
+	void pwmFreqChange();
+	void changeDigital1(bool value);
+	void changeDigital2(bool value);
 	void changeDigital3(bool value);
 	void changeDigital4(bool value);
 	void changeDigital5(bool value);
